@@ -3,12 +3,14 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './component/home/home.component';
 import { ProductsComponent } from './component/products/products.component';
-import { FairsComponent } from './component/fairs/fairs.component';
 import { ProductFormComponent } from './component/products/product-form/product-form.component';
 import { ProductComponent } from './component/products/product/product.component';
 import { UsersDashboardComponent } from './component/users-dashboard/users-dashboard.component';
 import { UserFormComponent } from './component/users-dashboard/user-form/user-form.component';
 import { UserDetailsComponent } from './component/users-dashboard/user-details/user-details.component';
+import { FairsDashboardComponent } from './component/fairs-dashboard/fairs-dashboard.component';
+import { FairsCardComponent } from './component/fairs-dashboard/fairs-card/fairs-card.component';
+import { FairsDetailsComponent } from './component/fairs-dashboard/fairs-details/fairs-details.component';
 
 const routes: Routes = [
   {
@@ -59,7 +61,13 @@ const routes: Routes = [
    
     {
     path: 'fairs',//BASE_URL/FAIRS
-    component:FairsComponent,
+    component:FairsDashboardComponent,
+    children:[
+      {
+        path:':id',
+        component:FairsDetailsComponent
+      }
+    ]
   }
 ];
 
