@@ -9,9 +9,7 @@ import { FairsService } from 'src/app/services/fairs.service';
 })
 export class FairsCardComponent implements OnInit {
 @Input() fairObj !: IFairs
-@ViewChildren('fairCard')
-fairCards!: QueryList<ElementRef>;
-  selectedFairId!: string;
+
   constructor(
     private _fairsservice:FairsService
   ) { }
@@ -19,19 +17,6 @@ fairCards!: QueryList<ElementRef>;
   ngOnInit(): void {
     
   }
-  onSelectFair(fair: IFairs) {
-  this.selectedFairId = fair.fairId;
 
-  setTimeout(() => {
-    const activeCard = this.fairCards.find(
-      card => card.nativeElement.classList.contains('active')
-    );
-
-    activeCard?.nativeElement.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center'   // 'start' हवे असेल तर वर येईल
-    });
-  });
-}
 
 }
