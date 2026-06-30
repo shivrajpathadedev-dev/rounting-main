@@ -12,18 +12,19 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 })
 export class ProductFormComponent implements OnInit {
   productForm!: FormGroup
+
   isInEditMode: boolean = false;
   productId!: string
   constructor(
     private _productservice: ProductsService,
     private _router: Router,
     private _routes: ActivatedRoute,
-    private _snackbar:SnackbarService
+    private _snackbar: SnackbarService
   ) { }
 
   ngOnInit(): void {
     this.createProductForm()
-    this.patchproductdata() 
+    this.patchproductdata()
   }
 
   createProductForm() {
@@ -34,13 +35,13 @@ export class ProductFormComponent implements OnInit {
     })
   }
 
-   onProductSubmit() {
+  onProductSubmit() {
     if (this.productForm.invalid) {
       this.productForm.markAllAsTouched()
       return
     } else {
       let productobj: Iproduct = {
-        ...this.productForm.value, 
+        ...this.productForm.value,
         pid: Date.now().toString()
       };
       console.log(productobj);
@@ -50,8 +51,7 @@ export class ProductFormComponent implements OnInit {
             console.log(res);
             this.productForm.reset()
             this._snackbar.openSuccessSnackbar(res.msg)
-              this._router.navigate(['/product',productobj.pid])
-              
+            this._router.navigate(['/product', productobj.pid])
           },
           error: err => {
             console.log(err);
@@ -61,23 +61,24 @@ export class ProductFormComponent implements OnInit {
   }
 
   patchproductdata() {
-    this.productId = this._routes.snapshot.paramMap.get('pid')!
-    if (this.productId) {
-      this.isInEditMode = true;
-      this._productservice.fetchProductById(this.productId)
-        .subscribe({
-          next: data => {
-            this.productForm.patchValue(data)
-           
-          },
-          error:err=>{
-            console.log(err);
-          }
-        })
-    }
+    // this.productId = this._routes.snapshot.paramMap.get('pid')!
+    this._routes.params.subscribe(params => {
+      this.productId = params['pid'];
+      if (this.productId) {
+        this.isInEditMode = true;
+        this._productservice.fetchProductById(this.productId)
+          .subscribe({
+            next: data => {
+              this.productForm.patchValue(data)
+            },
+            error: err => {
+              console.log(err);
+            }
+          })
+      }
+    })
   }
- 
-
+  
   onupdate() {
     if (this.productForm.invalid) {
       this.productForm.markAllAsTouched()
@@ -93,7 +94,7 @@ export class ProductFormComponent implements OnInit {
             console.log(data);
             this.isInEditMode = false
             this._snackbar.openSuccessSnackbar(data.msg)
-            this._router.navigate(['/product',upd_obj.pid])
+            this._router.navigate(['/product', upd_obj.pid])
           },
           error: err => {
             console.log(err);
